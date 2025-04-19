@@ -18,11 +18,12 @@ public class Film {
 	private List<Actor> actorList;
 	private String language;
 	private List<String> categories;
+	private List<String> copiesInInventory;
 
 	// CONSTRUCTORS
 	public Film(Integer id, String title, String description, int releaseYear, Integer languageID,
 			Integer rentalDuration, Double rentalRate, int length, Double replacementCost, String rating,
-			String specialFeatures, List<Actor> actorList, String language, List<String> categories) {
+			String specialFeatures, List<Actor> actorList, String language, List<String> categories, List<String> copiesInInventory) {
 		super();
 		this.id = id;
 		this.title = title;
@@ -38,6 +39,7 @@ public class Film {
 		this.actorList = actorList;
 		this.language = language;
 		this.categories = categories;
+		this.copiesInInventory = copiesInInventory;
 	}
 
 	public Film() {
@@ -155,6 +157,14 @@ public class Film {
 
 	public void setCategories(List<String> categories) {
 		this.categories = categories;
+	}
+
+	public List<String> getCopiesInInventory() {
+		return copiesInInventory;
+	}
+
+	public void setCopiesInInventory(List<String> copiesInInventory) {
+		this.copiesInInventory = copiesInInventory;
 	}
 
 	// toString OVERRIDE

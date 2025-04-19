@@ -19,12 +19,12 @@ public class FilmQueryApp {
 	}
 
 	private void launch() {
-		startUserInterface(input);
+		startUserInterface();
 
 		input.close();
 	}
 
-	private void startUserInterface(Scanner input) {
+	private void startUserInterface() {
 		while (keepGoing) {
 			printMenu();
 			String menuChoice = input.nextLine();
@@ -154,6 +154,7 @@ public class FilmQueryApp {
 		System.out.println("Rental Duration: " + foundFilm.getRentalDuration());
 		System.out.println("Rental Rate: " + foundFilm.getRentalRate());
 		System.out.println("Replacement Cost: " + foundFilm.getReplacementCost());
+		System.out.println("Copies In Inventory: " + foundFilm.getCopiesInInventory());
 		System.out.println("-------------------------------------------------------------------------");
 	}
 	public void printMenu() {
