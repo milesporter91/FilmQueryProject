@@ -11,6 +11,7 @@ public class FilmQueryApp {
 
 	DatabaseAccessor db = new DatabaseAccessorObject();
 	boolean keepGoing = true;
+	Scanner input = new Scanner(System.in);
 
 	public static void main(String[] args) {
 		FilmQueryApp app = new FilmQueryApp();
@@ -18,7 +19,6 @@ public class FilmQueryApp {
 	}
 
 	private void launch() {
-		Scanner input = new Scanner(System.in);
 		startUserInterface(input);
 
 		input.close();
@@ -28,27 +28,39 @@ public class FilmQueryApp {
 		while (keepGoing) {
 			printMenu();
 			String menuChoice = input.nextLine();
-			runUserChoice(input, menuChoice);
+			runUserChoice(menuChoice);
 			
 			
 		}
 	}
 
-	public void runUserChoice(Scanner input, String menuChoice) {
+	public int getFilmId() {
+		System.out.println("Please enter a film ID number: ");
+		int filmId = input.nextInt();
+		input.nextLine();
+		return filmId;
+	}
+	
+	public String getSearchQuery() {
+		System.out.println("Please enter a keyword to search for a film: ");
+		String filmSearchQuery = input.nextLine();
+		return filmSearchQuery;
+	}
+	
+	public void runUserChoice(String menuChoice) {
 		switch (menuChoice) {
 		case "1": {
-			System.out.println("Please enter a film ID number: ");
-			int filmId = input.nextInt();
-			input.nextLine();
+			int filmId = getFilmId();
 			Film foundFilm = db.findFilmById(filmId);
 			printFilm(foundFilm);
+			getFilmDetailsOrMainMenu(foundFilm);
 			break;
 		}
 		case "2": {
-			System.out.println("Please enter a keyword to search for a film: ");
-			String filmSearchQuery = input.nextLine();
+			String filmSearchQuery = getSearchQuery();
 			List<Film> foundFilmsKeyword = db.findFilmByKeyword(filmSearchQuery);
-			printFilms(input, foundFilmsKeyword);
+			printFilms(foundFilmsKeyword);
+			getFilmDetailsOrMainMenu(foundFilmsKeyword);
 			break;
 		}
 		case "3": {
@@ -66,19 +78,23 @@ public class FilmQueryApp {
 			System.out.println("-------------------------------------------------------------------------");
 		} else {
 			String actorList = "";
+			String categoryList = "";
 			for (int j = 0; j < foundFilm.getActorList().size(); j++) {
 				actorList += " " + foundFilm.getActorList().get(j).getFirstName() + " "
 						+ foundFilm.getActorList().get(j).getLastName() + " |";
 			}
+			for (int k = 0; k < foundFilm.getCategories().size(); k++) {
+				categoryList += " " + foundFilm.getCategories().get(k) + " |";
+			}
 			System.out.println("-------------------------------------------------------------------------");
 			System.out.println("Language: " + foundFilm.getLanguage() + "\nTitle: " + foundFilm.getTitle()
 					+ "\nYear Released: " + foundFilm.getReleaseYear() + "\nRated: " + foundFilm.getRating()
-					+ "\nDescription: " + foundFilm.getDescription() + "\nActors: |" + actorList);
+					+ "\nDescription: " + foundFilm.getDescription() + "\nActors: |" + actorList + "\nCategories: |" + categoryList);
 			System.out.println("-------------------------------------------------------------------------");
 		}
 	}
 	
-	public void printFilms(Scanner input, List<Film> foundFilmsKeyword) {
+	public void printFilms(List<Film> foundFilmsKeyword) {
 		if (foundFilmsKeyword.isEmpty()) {
 			System.out.println("-------------------------------------------------------------------------");
 			System.out.println("We don't have any films containing that keyword");
@@ -91,6 +107,11 @@ public class FilmQueryApp {
 		System.out.println("Search results: " + foundFilmsKeyword.size());
 		System.out.println("-------------------------------------------------------------------------");
 		
+		}
+		
+	}
+	
+	public void getFilmDetailsOrMainMenu(List<Film> foundFilmsKeyword) {
 		System.out.println();
 		System.out.println("Would you like to view a film's details, or return to the main menu?");
 		System.out.println("1. Details		2. Main Menu");
@@ -106,8 +127,17 @@ public class FilmQueryApp {
 			Film foundFilm = foundFilmsKeyword.get(userChoice - 1 );
 			printFilmDetails(foundFilm);
 		}
+	}
+	
+	public void getFilmDetailsOrMainMenu(Film foundFilm) {
+		System.out.println();
+		System.out.println("Would you like to view a film's details, or return to the main menu?");
+		System.out.println("1. Details		2. Main Menu");
+		int userChoice = input.nextInt();
+		input.nextLine();
+		if (userChoice == 1) {
+			printFilmDetails(foundFilm);
 		}
-		
 	}
 	
 	public void printFilmDetails(Film foundFilm) {

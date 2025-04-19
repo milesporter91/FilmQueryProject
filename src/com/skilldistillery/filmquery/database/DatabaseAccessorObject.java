@@ -28,6 +28,7 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 			PreparedStatement pst = conn.prepareStatement(sql);
 			pst.setInt(1, filmId);
 			List<Actor> actorList = findActorsByFilmId(filmId);
+			List<String> categories = findCategoriesByFilmId(filmId);
 			String language = findLanguageByFilmId(filmId);
 			// Extract results
 			ResultSet filmData = pst.executeQuery();
@@ -35,8 +36,9 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 			foundFilm = new Film(filmData.getInt("id"), filmData.getString("title"), filmData.getString("description"),
 					filmData.getInt("release_year"), filmData.getInt("language_id"), filmData.getInt("rental_duration"),
 					filmData.getDouble("rental_rate"), filmData.getInt("length"), filmData.getDouble("replacement_cost"),
-					filmData.getString("rating"), filmData.getString("special_features"), actorList, language);
+					filmData.getString("rating"), filmData.getString("special_features"), actorList, language, categories);
 			}
+			filmData.close();
 			pst.close();
 			conn.close();
 
@@ -64,14 +66,40 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 			foundActor = new Actor(actorData.getInt("a.id"), actorData.getString("a.first_name"), actorData.getString("a.last_name"));
 			pst.close();
 			conn.close();
-			return foundActor;
 
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return foundActor;
 	}
+	@Override
+	public List<String> findCategoriesByFilmId(int filmId) {
+		List<String> categoriesOfFilm = new LinkedList<>();
+		String foundCategory = null;
+		try {
+			// Connect to database
+			Connection conn = DriverManager.getConnection(URL, USERNAME, PASSWORD);
 
+			// Prepare statement
+			String sql = " SELECT c.name "
+					+ "FROM category c JOIN film_category fc ON c.id = fc.category_id "
+					+ "JOIN film f ON fc.film_id = f.id WHERE f.id = ?";
+			PreparedStatement pst = conn.prepareStatement(sql);
+			pst.setInt(1, filmId);
+			// Extract results
+			ResultSet categoryData = pst.executeQuery();
+			while (categoryData.next()) {
+				foundCategory = categoryData.getString("c.name") + " | ";
+				categoriesOfFilm.add(foundCategory);
+			}
+			categoryData.close();
+			pst.close();
+			conn.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return categoriesOfFilm;
+	}
 	@Override
 	public List<Actor> findActorsByFilmId(int filmId) {
 		List<Actor> actorsInFilm = new LinkedList<>();
@@ -91,8 +119,9 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 				foundActor = new Actor(actorData.getInt("a.id"), actorData.getString("a.first_name"), actorData.getString("a.last_name"));
 				actorsInFilm.add(foundActor);
 			}
-			return actorsInFilm;
-
+			actorData.close();
+			pst.close();
+			conn.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -114,17 +143,17 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 			while (filmData.next()) {
 				int filmId = filmData.getInt("f.id");
 				List<Actor> actorList = findActorsByFilmId(filmId);
+				List<String> categories = findCategoriesByFilmId(filmId);
 				String language = findLanguageByFilmId(filmId);
 			foundFilm = new Film(filmData.getInt("id"), filmData.getString("title"), filmData.getString("description"),
 					filmData.getInt("release_year"), filmData.getInt("language_id"), filmData.getInt("rental_duration"),
 					filmData.getDouble("rental_rate"), filmData.getInt("length"), filmData.getDouble("replacement_cost"),
-					filmData.getString("rating"), filmData.getString("special_features"), actorList, language);
+					filmData.getString("rating"), filmData.getString("special_features"), actorList, language, categories);
 			foundFilms.add(foundFilm);
 			}
 			filmData.close();
 			pst.close();
 			conn.close();
-			return foundFilms;
 			
 	
 
@@ -150,10 +179,14 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 			while (languageData.next()) {
 			language = languageData.getString("name");
 			}
+			languageData.close();
+			pst.close();
+			conn.close();
 
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		
 		return language;
 	}
 	
