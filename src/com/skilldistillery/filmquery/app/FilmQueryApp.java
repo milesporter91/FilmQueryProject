@@ -47,60 +47,62 @@ public class FilmQueryApp {
 			System.out.println("3: Exit");
 			String menuChoice = input.nextLine();
 			switch (menuChoice) {
-			case "1": {
-				System.out.println("Please enter a film ID number: ");
-				int filmId = input.nextInt();
-				input.nextLine();
-				foundFilm = db.findFilmById(filmId);
-				if (foundFilm == null) {
-					System.out.println("-------------------------------------------------------------------------");
-					System.out.println("We don't have a film with that ID");
-					System.out.println("-------------------------------------------------------------------------");
-				} else {
-					String actorList = "";
-					for (int j = 0; j < foundFilm.getActorList().size(); j++) {
-						actorList += " " + foundFilm.getActorList().get(j).getFirstName() + " " 
-									+ foundFilm.getActorList().get(j).getLastName() + " |";
-					}
-					System.out.println("-------------------------------------------------------------------------");
-					System.out.println("Language: " + foundFilm.getLanguage() + "\nTitle: " + foundFilm.getTitle() + "\nYear Released: "
-							+ foundFilm.getReleaseYear() + "\nRated: " + foundFilm.getRating() + "\nDescription: "
-							+ foundFilm.getDescription() + "\nActors: |" + actorList);
-					System.out.println("-------------------------------------------------------------------------");
-				}
-				break;
-			}
-			case "2": {
-				System.out.println("Please enter a keyword to search for a film: ");
-				String filmSearchQuery = input.nextLine();
-				List<Film> foundFilmsKeyword = db.findFilmByKeyword(filmSearchQuery);
-				if (foundFilmsKeyword == null) {
-					System.out.println("-------------------------------------------------------------------------");
-					System.out.println("We don't have a film containing that keyword");
-					System.out.println("-------------------------------------------------------------------------");
-				} else {
-					for (int i = 0; i < foundFilmsKeyword.size(); i++) {
+				case "1": {
+					System.out.println("Please enter a film ID number: ");
+					int filmId = input.nextInt();
+					input.nextLine();
+					foundFilm = db.findFilmById(filmId);
+					if (foundFilm == null) {
+						System.out.println("-------------------------------------------------------------------------");
+						System.out.println("We don't have a film with that ID");
+						System.out.println("-------------------------------------------------------------------------");
+					} else {
 						String actorList = "";
-						for (int j = 0; j < foundFilmsKeyword.get(i).getActorList().size(); j++) {
-							actorList += " " + foundFilmsKeyword.get(i).getActorList().get(j).getFirstName() + " " 
-										+ foundFilmsKeyword.get(i).getActorList().get(j).getLastName() + " |";
+						for (int j = 0; j < foundFilm.getActorList().size(); j++) {
+							actorList += " " + foundFilm.getActorList().get(j).getFirstName() + " "
+									+ foundFilm.getActorList().get(j).getLastName() + " |";
 						}
 						System.out.println("-------------------------------------------------------------------------");
-						System.out.println("Language: " + foundFilmsKeyword.get(i).getLanguage() + "\nTitle: " + foundFilmsKeyword.get(i).getTitle() + "\nYear Released: "
-								+ foundFilmsKeyword.get(i).getReleaseYear() + "\nRated: " + foundFilmsKeyword.get(i).getRating()
-								+ "\nDescription: " + foundFilmsKeyword.get(i).getDescription() + "\nActors: |" + actorList);
+						System.out.println("Language: " + foundFilm.getLanguage() + "\nTitle: " + foundFilm.getTitle()
+								+ "\nYear Released: " + foundFilm.getReleaseYear() + "\nRated: " + foundFilm.getRating()
+								+ "\nDescription: " + foundFilm.getDescription() + "\nActors: |" + actorList);
+						System.out.println("-------------------------------------------------------------------------");
 					}
+					break;
 				}
-				System.out.println("-------------------------------------------------------------------------");
-				System.out.println("Search results: " + foundFilmsKeyword.size());
-				System.out.println("-------------------------------------------------------------------------");
-				break;
-			}
-			case "3": {
-				System.out.println("Goodbye!");
-				keepGoing = false;
-				break;
-			}
+				case "2": {
+					System.out.println("Please enter a keyword to search for a film: ");
+					String filmSearchQuery = input.nextLine();
+					List<Film> foundFilmsKeyword = db.findFilmByKeyword(filmSearchQuery);
+					if (foundFilmsKeyword.isEmpty()) {
+						System.out.println("-------------------------------------------------------------------------");
+						System.out.println("We don't have a film containing that keyword");
+						System.out.println("-------------------------------------------------------------------------");
+					} else {
+						for (int i = 0; i < foundFilmsKeyword.size(); i++) {
+							String actorList = "";
+							for (int j = 0; j < foundFilmsKeyword.get(i).getActorList().size(); j++) {
+								actorList += " " + foundFilmsKeyword.get(i).getActorList().get(j).getFirstName() + " "
+										+ foundFilmsKeyword.get(i).getActorList().get(j).getLastName() + " |";
+							}
+							System.out.println("-------------------------------------------------------------------------");
+							System.out.println("Language: " + foundFilmsKeyword.get(i).getLanguage() + "\nTitle: "
+									+ foundFilmsKeyword.get(i).getTitle() + "\nYear Released: "
+									+ foundFilmsKeyword.get(i).getReleaseYear() + "\nRated: "
+									+ foundFilmsKeyword.get(i).getRating() + "\nDescription: "
+									+ foundFilmsKeyword.get(i).getDescription() + "\nActors: |" + actorList);
+						}
+					}
+					System.out.println("-------------------------------------------------------------------------");
+					System.out.println("Search results: " + foundFilmsKeyword.size());
+					System.out.println("-------------------------------------------------------------------------");
+					break;
+				}
+				case "3": {
+					System.out.println("Goodbye!");
+					keepGoing = false;
+					break;
+				}
 			}
 		}
 	}

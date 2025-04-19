@@ -27,7 +27,7 @@ class DatabaseAccessTests {
   void test_getFilmById_returns_film_with_id() {
     Film f = db.findFilmById(1);
     assertNotNull(f);
-//    assertEquals("ACADEMY DINOSAUR", f.getTitle());
+    assertEquals("ACADEMY DINOSAUR", f.getTitle());
   }
 
   @Test
