@@ -16,11 +16,12 @@ public class Film {
 	private String rating;
 	private String specialFeatures;
 	private List<Actor> actorList;
+	private String language;
 
 	// CONSTRUCTORS
 	public Film(Integer id, String title, String description, int releaseYear, Integer languageID,
 			Integer rentalDuration, Double rentalRate, int length, Double replacementCost, String rating,
-			String specialFeatures, List<Actor> actorList) {
+			String specialFeatures, List<Actor> actorList, String language) {
 		super();
 		this.id = id;
 		this.title = title;
@@ -34,6 +35,7 @@ public class Film {
 		this.rating = rating;
 		this.specialFeatures = specialFeatures;
 		this.actorList = actorList;
+		this.language = language;
 	}
 
 	public Film() {
@@ -135,6 +137,14 @@ public class Film {
 
 	public void setActorList(List<Actor> actorList) {
 		this.actorList = actorList;
+	}
+
+	public String getLanguage() {
+		return language;
+	}
+
+	public void setLanguage(String language) {
+		this.language = language;
 	}
 
 	// toString OVERRIDE
