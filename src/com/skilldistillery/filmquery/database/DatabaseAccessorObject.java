@@ -29,15 +29,15 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 			pst.setInt(1, filmId);
 			List<Actor> actorList = findActorsByFilmId(filmId);
 			List<String> categories = findCategoriesByFilmId(filmId);
+			List<String> rentalCopiesList = findRentalCopiesByFilmId(filmId);
 			String language = findLanguageByFilmId(filmId);
-			List<String> copiesInInventory = findCopiesInInventoryByFilmId(filmId);
 			// Extract results
 			ResultSet filmData = pst.executeQuery();
 			if (filmData.next()) {
 			foundFilm = new Film(filmData.getInt("id"), filmData.getString("title"), filmData.getString("description"),
 					filmData.getInt("release_year"), filmData.getInt("language_id"), filmData.getInt("rental_duration"),
 					filmData.getDouble("rental_rate"), filmData.getInt("length"), filmData.getDouble("replacement_cost"),
-					filmData.getString("rating"), filmData.getString("special_features"), actorList, language, categories, copiesInInventory);
+					filmData.getString("rating"), filmData.getString("special_features"), actorList, language, categories, rentalCopiesList);
 			}
 			filmData.close();
 			pst.close();
@@ -145,12 +145,12 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 				int filmId = filmData.getInt("f.id");
 				List<Actor> actorList = findActorsByFilmId(filmId);
 				List<String> categories = findCategoriesByFilmId(filmId);
+				List<String> filmCopiesList = findRentalCopiesByFilmId(filmId);
 				String language = findLanguageByFilmId(filmId);
-				List<String> copiesInInventory = findCopiesInInventoryByFilmId(filmId);
 			foundFilm = new Film(filmData.getInt("id"), filmData.getString("title"), filmData.getString("description"),
 					filmData.getInt("release_year"), filmData.getInt("language_id"), filmData.getInt("rental_duration"),
 					filmData.getDouble("rental_rate"), filmData.getInt("length"), filmData.getDouble("replacement_cost"),
-					filmData.getString("rating"), filmData.getString("special_features"), actorList, language, categories, copiesInInventory);
+					filmData.getString("rating"), filmData.getString("special_features"), actorList, language, categories, filmCopiesList);
 			foundFilms.add(foundFilm);
 			}
 			filmData.close();
@@ -191,32 +191,31 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 		
 		return language;
 	}
-
-	@Override
-	public List<String> findCopiesInInventoryByFilmId(int filmId) {
-		List<String> copiesInInventory = new LinkedList<>();
-		String copyOfFilm = "";
+	
+	public List<String> findRentalCopiesByFilmId(int filmId) {
+		List<String> rentalCopiesList = new LinkedList<>();
+		String rentalCopy;
 		try {
 			// Connect to database
 			Connection conn = DriverManager.getConnection(URL, USERNAME, PASSWORD);
 
 			// Prepare statement
-			String sql = "SELECT inventory_item.id, inventory_item.media_condition FROM inventory_item JOIN film ON film.id = inventory_item.film_id WHERE film.id = ?;";
+			String sql = "  SELECT DISTINCT i.id, i.media_condition FROM inventory_item i WHERE i.film_id = ? ";
 			PreparedStatement pst = conn.prepareStatement(sql);
 			pst.setInt(1, filmId);
 			// Extract results
-			ResultSet inventoryData = pst.executeQuery();
-			while (inventoryData.next()) {
-				copyOfFilm += "Copy ID: " + inventoryData.getString("inventory_item.id") + " Condition: " + inventoryData.getString("inventory_item.media_condition");
-				copiesInInventory.add(copyOfFilm);
+			ResultSet rentalCopyData = pst.executeQuery();
+			while (rentalCopyData.next()) {
+				rentalCopy = rentalCopyData.getString("i.id") + " " + rentalCopyData.getString("i.media_condition");
+				rentalCopiesList.add(rentalCopy);
 			}
-			inventoryData.close();
+			rentalCopyData.close();
 			pst.close();
 			conn.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return copiesInInventory;
+		return rentalCopiesList;
 	}
-	
+
 }
