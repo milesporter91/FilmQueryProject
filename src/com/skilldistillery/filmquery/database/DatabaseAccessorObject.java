@@ -90,7 +90,7 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 			// Extract results
 			ResultSet categoryData = pst.executeQuery();
 			while (categoryData.next()) {
-				foundCategory = categoryData.getString("c.name") + " | ";
+				foundCategory = categoryData.getString("c.name");
 				categoriesOfFilm.add(foundCategory);
 			}
 			categoryData.close();
@@ -206,7 +206,7 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 			// Extract results
 			ResultSet rentalCopyData = pst.executeQuery();
 			while (rentalCopyData.next()) {
-				rentalCopy = rentalCopyData.getString("i.id") + " " + rentalCopyData.getString("i.media_condition");
+				rentalCopy = "Rental ID: " + rentalCopyData.getString("i.id") + " Rental Condition: " + rentalCopyData.getString("i.media_condition");
 				rentalCopiesList.add(rentalCopy);
 			}
 			rentalCopyData.close();

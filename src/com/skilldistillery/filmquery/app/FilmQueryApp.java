@@ -147,6 +147,7 @@ public class FilmQueryApp {
 		int copyNumber = 1;
 		for (int j = 0; j < foundFilm.getActorList().size(); j++) {
 			rentalCopies += "Copy #" + copyNumber + ": " + foundFilm.getRentalCopiesList().get(j) + " | ";
+			copyNumber++;
 		}
 		return rentalCopies;
 	}
@@ -164,11 +165,12 @@ public class FilmQueryApp {
 		System.out.println("Film ID: " + foundFilm.getId());
 		System.out.println("Title: " + foundFilm.getTitle());
 		System.out.println("Rating: " + foundFilm.getRating());
+		System.out.println("Film Categories: " + printCategoryList(foundFilm));
 		System.out.println("Description: " + foundFilm.getDescription());
 		System.out.println("Release Year: " + foundFilm.getReleaseYear());
 		System.out.println("Language ID: " + foundFilm.getLanguageID());
 		System.out.println("Language: " + foundFilm.getLanguage());
-		System.out.println("Length: " + foundFilm.getLength());
+		System.out.println("Length: " + foundFilm.getLength() + " minutes");
 		System.out.println("Actor List: " + printActorList(foundFilm));
 		System.out.println("Special Features: " + foundFilm.getSpecialFeatures());
 		System.out.println("Rental Duration: " + foundFilm.getRentalDuration());
