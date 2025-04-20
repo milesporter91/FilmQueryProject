@@ -27,8 +27,7 @@ public class FilmQueryApp {
 	private void startUserInterface() {
 		while (keepGoing) {
 			printMenu();
-			String menuChoice = input.nextLine();
-			runUserChoice(menuChoice);
+			runUserChoice();
 
 		}
 	}
@@ -55,7 +54,8 @@ public class FilmQueryApp {
 		return filmSearchQuery;
 	}
 
-	public void runUserChoice(String menuChoice) {
+	public void runUserChoice() {
+		String menuChoice = input.nextLine();
 		switch (menuChoice) {
 		case "1": {
 			int filmId = getFilmId();
@@ -73,8 +73,7 @@ public class FilmQueryApp {
 		}
 		case "3": {
 			System.out.println("Goodbye!");
-			keepGoing = false;
-			break;
+			System.exit(0);
 		}
 		}
 	}
@@ -84,6 +83,7 @@ public class FilmQueryApp {
 			System.out.println("-------------------------------------------------------------------------");
 			System.out.println("We don't have a film with that ID");
 			System.out.println("-------------------------------------------------------------------------");
+			startUserInterface();
 		} else {
 			String actorList = printActorList(foundFilm);
 			String categoryList = printCategoryList(foundFilm);
@@ -101,6 +101,7 @@ public class FilmQueryApp {
 			System.out.println("-------------------------------------------------------------------------");
 			System.out.println("We don't have any films containing that keyword");
 			System.out.println("-------------------------------------------------------------------------");
+			startUserInterface();
 		} else {
 			for (int i = 0; i < foundFilmsKeyword.size(); i++) {
 				printFilm(foundFilmsKeyword.get(i));
@@ -129,6 +130,13 @@ public class FilmQueryApp {
 				input.nextLine();
 				Film foundFilm = foundFilmsKeyword.get(userChoice - 1);
 				printFilmDetails(foundFilm);
+			}
+			else if (userChoice == 2) {
+				startUserInterface();
+			}
+			else {
+				System.out.println("Please choose a valid option..");
+				getFilmDetailsOrMainMenu(foundFilmsKeyword);
 			}
 		} catch (Exception e) {
 			System.out.println("-------------------------------------------------------------------------");
