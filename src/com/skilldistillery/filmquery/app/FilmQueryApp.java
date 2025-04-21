@@ -57,24 +57,24 @@ public class FilmQueryApp {
 	public void runUserChoice() {
 		String menuChoice = input.nextLine();
 		switch (menuChoice) {
-		case "1": {
-			int filmId = getFilmId();
-			Film foundFilm = db.findFilmById(filmId);
-			printFilm(foundFilm);
-			getFilmDetailsOrMainMenu(foundFilm);
-			break;
-		}
-		case "2": {
-			String filmSearchQuery = getSearchQuery();
-			List<Film> foundFilmsKeyword = db.findFilmByKeyword(filmSearchQuery);
-			printFilms(foundFilmsKeyword);
-			getFilmDetailsOrMainMenu(foundFilmsKeyword);
-			break;
-		}
-		case "3": {
-			System.out.println("Goodbye!");
-			System.exit(0);
-		}
+			case "1": {
+				int filmId = getFilmId();
+				Film foundFilm = db.findFilmById(filmId);
+				printFilm(foundFilm);
+				getFilmDetailsOrMainMenu(foundFilm);
+				break;
+			}
+			case "2": {
+				String filmSearchQuery = getSearchQuery();
+				List<Film> foundFilmsKeyword = db.findFilmByKeyword(filmSearchQuery);
+				printFilms(foundFilmsKeyword);
+				getFilmDetailsOrMainMenu(foundFilmsKeyword);
+				break;
+			}
+			case "3": {
+				System.out.println("Goodbye!");
+				System.exit(0);
+			}
 		}
 	}
 
@@ -130,11 +130,9 @@ public class FilmQueryApp {
 				input.nextLine();
 				Film foundFilm = foundFilmsKeyword.get(userChoice - 1);
 				printFilmDetails(foundFilm);
-			}
-			else if (userChoice == 2) {
+			} else if (userChoice == 2) {
 				startUserInterface();
-			}
-			else {
+			} else {
 				System.out.println("Please choose a valid option..");
 				getFilmDetailsOrMainMenu(foundFilmsKeyword);
 			}
